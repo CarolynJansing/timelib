@@ -1,22 +1,73 @@
 /*
- * Tag des Jahres
+ * day des yeares
  * Autor: Carolyn Jansing
  * Datum: 15.3.2022
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-int schaltjahr(int jahreszahl)
+
+int day_of_the_year(int day, int month, int year);
+void input_date(int *day, int *month, int *year);
+int is_leapyear(int year);
+int get_days_for_month(int month, int year);
+int exists_date(int day, int month, int year);
+
+int main()
+{
+    int year = 0;
+    int month = 0;
+    int day = 0;
+    input_date(&year,&month,&day);
+    printf('%d %d %d',day,month,year);
+    day_of_the_year(year,month,day);
+}
+int day_of_the_year(int day, int month, int year)
+{
+    int days = 0;
+
+    for (int i = 0; i < month; i++)
+    {
+        days = days + get_days_for_month(i + 1,year);
+    }
+    days = days + day;
+    // Ausgabe
+    printf("Es ist day %d des yeares\n", days);
+
+    return days;
+}
+void input_date(int *day, int *month, int *year)
+{
+
+    // Eingabe day mit Berücksichtigung des Schaltyeares und months
+    do
+    {
+        printf(",-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,\n");
+        printf("Gebe ein gültiges Jahr ein !\n");
+        printf("******************************\n");
+        printf("Geb ein year ein:\n");
+        scanf("%i", &year);
+        printf("Geb ein month ein:\n");
+        scanf("%i", &month);
+        printf("Geb ein day  ein:\n");
+        scanf("%i", &day);
+        
+
+    } while (exists_date(day, month, year)== 0);
+}
+
+
+int is_leapyear(int year)
 {
     // Wert um Ergebnis auf wahr/falsch zu setzen
     int ergebnis = 0;
 
     //Überprüfung der Bedingungen
-    if (jahreszahl % 4 == 0)
+    if (year % 4 == 0)
     {
-        if (jahreszahl % 100 == 0)
+        if (year % 100 == 0)
         {
-            if (jahreszahl % 400 == 0)
+            if (year % 400 == 0)
             {
                 ergebnis = 0;
             }
@@ -32,70 +83,37 @@ int schaltjahr(int jahreszahl)
     }
     else
     {
-        ergebnis = 1;
+        ergebnis = -1;
     }
 }
-int main()
+
+int get_days_for_month(int month, int year)
 {
-    //Initialisierung Variablen
-    int tage_pro_monat[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int jahr = 0;
-    int monat = 0;
-    int tag = 0;
-    int tage = 0;
-
- 
-   //Eingabe Jahr
-    do
+    int days_per_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (is_leapyear(year) == 0)
     {
-       printf("Geb ein Jahr ein:\n");
-       scanf("%i", &jahr);
-    }while (jahr==0 || jahr<1000 ||jahr>2030);
-  
-    //Eingabe Monat
-    do
-    {
-      printf("Geb ein Monat ein:\n");
-      scanf("%i", &monat);
-    }while (monat<=0 || monat>12 );
-    //Eingabe Tag mit Berücksichtigung des Schaltjahres und Monats
-    do
-    {
-         printf("Geb ein Tag  ein:\n");
-         scanf("%i", &tag);
-         if ((monat == 1 || monat == 3 || monat == 5 || monat==7|| monat ==8 || monat == 10 || monat==12) && (tag>31))
-         { 
-            tag = 0;
-         }
-         else if (monat == 2){
-             if (schaltjahr(jahr)==0 && tag > 29)
-             {
-                 tag = 0;
-             }
-             if(schaltjahr(jahr)==0 && tag>28){
-                 tag = 0;
-             }
-         }
-         else if (tag>30){
-             tag = 0;
-         }
-         else{
-
-         }
-    } while (tag<=0);
-    
-    //Rechnung der Tage
-    if (schaltjahr(jahr) == 0)
-    {
-        tage_pro_monat[1] = 29;
+        days_per_month[1] = 29;
     }
-    for (int i = 0; i < monat; i++)
+    if (month < 1 || month > 12 || year < 1582 || year > 2400)
     {
-        tage = tage + tage_pro_monat[i];
+        return -1;
     }
-    tage = tage + tag;
-    //Ausgabe
-    printf("Es ist Tag %d des Jahres\n", tage);
 
-    return 0;
+    return days_per_month[month-1];
+}
+
+int exists_date(int day, int month, int year)
+{
+    if (year < 1583 || year > 2400 || month < 1 || month > 12)
+    {
+        return 0;
+    }
+    else if (day>get_days_for_month(month,year))
+    {
+        return 0;
+    }
+    else{
+        printf("valid");
+        return 1;
+    }
 }
