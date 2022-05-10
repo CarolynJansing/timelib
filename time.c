@@ -4,9 +4,9 @@
 #include <string.h>
 #include "time.h"
 
+// Rechnet Tag des Jahres aus
 int day_of_the_year(struct daydate date)
 {
-
     int result = 0;
     int i;
     int days_for_month = 0;
@@ -22,6 +22,7 @@ int day_of_the_year(struct daydate date)
     return result;
 }
 
+// Überprüft ob das eingegebene Datum valide ist
 void input_date(struct daydate date)
 {
 
@@ -35,6 +36,7 @@ void input_date(struct daydate date)
     scanf("%d", &date.day);
 }
 
+//Überprüft ob das eingegebene Jahr ein Schaltjahr ist
 int is_leapyear(int year)
 {
 
@@ -67,6 +69,7 @@ int is_leapyear(int year)
     }
 }
 
+//Überprüft ob das Datum existiert
 int exists_date(struct daydate date)
 {
 
@@ -83,6 +86,7 @@ int exists_date(struct daydate date)
     return 1;
 }
 
+// gibt die Tagesanzahl des gegegebenen Monats zurück
 int get_days_for_month(int month, int year)
 {
     int tage_pro_monat[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -93,14 +97,4 @@ int get_days_for_month(int month, int year)
     }
 
     return tage_pro_monat[month];
-}
-
-int day_of_week(struct daydate date)
-{
-    if (date.month < 3)
-    {
-        date.month += 12;
-        date.year--;
-    }
-    return (((13 * date.month + 3) / 5 + date.day + date.year + date.year / 4 - date.year / 100 + date.year / 400) % 7);
 }

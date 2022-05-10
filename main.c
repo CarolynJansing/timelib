@@ -11,7 +11,7 @@
 #include <string.h>
 #include "time.h"
 
-
+//Main Funktion die Eingaben einliest und die Funktionen aufruft
 int main()
 {
     int result = 0;
